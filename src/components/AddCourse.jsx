@@ -12,7 +12,7 @@ const AddCourse = () => {
     }
     const readValue = () => {
         console.log(data)
-        axios.post("http://localhost:8088/add",data).then(
+        axios.post("http://localhost:8080/add",data).then(
             (Response)=>{
                 console.log(Response.data)
                 if(Response.data.status == "success"){

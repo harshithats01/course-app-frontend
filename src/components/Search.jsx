@@ -5,22 +5,47 @@ import axios from 'axios'
 const Search = () => {
     const [data, setData] = useState(
         {
-            "course": " ",
+            "course": " "
         }
     )
     const [result, setResult] = useState([])
+
+//delete event handling
+const deleteCourse=(id)=>{
+    let input={"_id":id}
+    axios.post("http://localhost:8080/delete",input).then(
+        (response)=>{
+            if(response.data.status =="success"){
+                alert("successfully deleted");
+            }else{
+                alert("error in deletion");
+            }
+        }
+    ).catch().finally()
+}
+
+
+
+
+
+
     const inputHandler = (event) => {
         setData({ ...data, [event.target.name]: event.target.value })
     }
+
+    //Search button event
     const readValue = () => {
         console.log(data)
-       axios.post("http://localhost:8088/search",data).then((response)=>{
+       axios.post("localhost:8080/search",data).then((response)=>{
         setResult(response.data)
         
-    }).catch((error) => {
+    }
+    ).catch(
+        (error) => {
         console.log(error.message)
         alert(error.map)
-    }).finally()
+    }
+    ).finally()
     }
     return (
         <div>
@@ -65,6 +90,8 @@ const Search = () => {
                                             <td>{value.duration}</td>
                                             <td>{value.venue}</td>
                                             <td>{value.trainer}</td>
+                                            <td><button className="btn btn-danger" onClick={()=>deleteCourse(value._id)}>Delete</button></td>
+                                            
                                         </tr>
                                         })
                                       }

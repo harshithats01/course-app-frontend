@@ -1,17 +1,26 @@
 import React, { useState } from 'react'
 import Navbar from './Navbar'
+import axios from 'axios'
 
 const Search = () => {
     const [data, setData] = useState(
         {
-            "course": " "
+            "course": " ",
         }
     )
+    const [result, setResult] = useState([])
     const inputHandler = (event) => {
         setData({ ...data, [event.target.name]: event.target.value })
     }
     const readValue = () => {
         console.log(data)
+       axios.post("http://localhost:8088/search",data).then((response)=>{
+        setResult(response.data)
+        
+    }).catch((error) => {
+        console.log(error.message)
+        alert(error.map)
+    }).finally()
     }
     return (
         <div>
@@ -30,6 +39,39 @@ const Search = () => {
                         </div>
                         <div className="col col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
                             <button className="btn btn-success" onClick={readValue}>Search</button>
+                        </div>
+                        <div className="row">
+                            <div className="col col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">course</th>
+                                            <th scope="col">title</th>
+                                            <th scope="col">description</th>
+                                            <th scope="col">date</th>
+                                            <th scope="col">duration</th>
+                                            <th scope="col">venue</th>
+                                            <th scope="col">trainer</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                      {
+                                        result.map((value,index)=>{
+                                            return   <tr>
+                                            <th scope="row">{value.course}</th>
+                                            <td>{value.title}</td>
+                                            <td>{value.description}</td>
+                                            <td>{value.date}</td>
+                                            <td>{value.duration}</td>
+                                            <td>{value.venue}</td>
+                                            <td>{value.trainer}</td>
+                                        </tr>
+                                        })
+                                      }
+
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
